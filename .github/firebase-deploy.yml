@@ -1,0 +1,33 @@
+name: Deploy to Firebase Hosting
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: '14'
+
+    - name: Install dependencies
+      run: npm install
+
+    - name: Build project
+      run: npm run build
+
+    - name: Deploy to Firebase
+      uses: w9jds/firebase-action@v1
+      with:
+        args: deploy --only hosting
+      env:
+        FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_TOKEN }}
+        PROJECT_ID: jwt-demo-24-3
